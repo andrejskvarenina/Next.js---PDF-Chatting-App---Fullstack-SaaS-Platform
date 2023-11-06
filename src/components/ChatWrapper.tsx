@@ -2,7 +2,7 @@
 
 const ChatWrapper = () => {
   return (
-    <div></div>
+    <div>test</div>
   )
 }
 
