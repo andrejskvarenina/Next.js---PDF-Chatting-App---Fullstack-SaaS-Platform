@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { trpc } from "../_trpc/client"
 import { Loader2 } from "lucide-react"
+import { useToast } from "@/components/ui/use-toast"
 
 
 const Page = () => {
@@ -11,20 +12,25 @@ const Page = () => {
   const searchParams = useSearchParams()
   const origin = searchParams.get('origin')
 
+  const { toast } = useToast();
+
   trpc.authCallback.useQuery(undefined, {
-    onSuccess: ({success}) => {
-      if(success) {
+    onSuccess: ({ success }) => {
+      if (success) {
         // user is synced to db
         router.push(origin ? `/${origin}` : '/dashboard')
       }
     },
     onError: (err) => {
-      if(err.data?.code === "UNAUTHORIZED") {
-        router.push('/sign-in')
+      if (err.data?.code === 'UNAUTHORIZED') {
+        toast({
+          title: "Please sign in first!",
+          description: "You have to be signed in to see your dashboard.",
+          variant: "destructive",
+        });
+        router.push('/');
       }
     },
-    retry: true,
-    retryDelay: 500, 
   })
 
   return (
