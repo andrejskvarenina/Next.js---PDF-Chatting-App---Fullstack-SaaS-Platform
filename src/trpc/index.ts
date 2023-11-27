@@ -9,7 +9,8 @@ export const appRouter = router({
     const { getUser } = getKindeServerSession();
     const user = getUser();
 
-    if (!user || !user.id || !user.email) throw new TRPCError({ code: "UNAUTHORIZED" });
+    if (!user || !user.id || !user.email)
+      throw new TRPCError({ code: "UNAUTHORIZED" });
 
     //check if the user is in db
     const dbUser = await db.user.findFirst({
@@ -39,6 +40,20 @@ export const appRouter = router({
       },
     });
   }),
+  getFileUploadStatus: privateProcedure
+    .input(z.object({ fileId: z.string() }))
+    .query(async ({input, ctx}) => {
+      const file = await db.file.findFirst({
+        where: {
+          id: input.fileId,
+          userId: ctx.userId,
+        }
+      })
+
+      if(!file) return {status: "PENDING" as const}
+
+      return { status: file.uploadStatus }
+    }),
   getFile: privateProcedure
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -51,9 +66,9 @@ export const appRouter = router({
         },
       });
 
-      if(!file) throw new TRPCError({ code: "NOT_FOUND" })
+      if (!file) throw new TRPCError({ code: "NOT_FOUND" });
 
-      return file
+      return file;
     }),
   deleteFile: privateProcedure
     .input(z.object({ id: z.string() }))
