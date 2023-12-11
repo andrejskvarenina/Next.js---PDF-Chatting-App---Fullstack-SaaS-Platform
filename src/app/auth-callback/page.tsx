@@ -28,7 +28,7 @@ const Page = () => {
           description: "You have to be signed in to see your dashboard.",
           variant: "destructive",
         });
-        router.push('/');
+        router.push('/sign-in');
       }
     },
   })
