@@ -9,6 +9,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import UserAccountNav from "./UserAccountNav";
 import MobileNav from "./MobileNav";
+import Image from "next/image";
 
 const Navbar = () => {
   const { getUser } = getKindeServerSession();
@@ -18,11 +19,19 @@ const Navbar = () => {
     <nav className='sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all'>
       <MaxWidthWrapper>
         <div className='flex h-14 items-center justify-between border-b border-zinc-200'>
-          <Link href='/' className='flex z-40 font-semibold'>
+          <Link href='/' className='flex z-40 font-semibold items-center'>
+            <Image
+              src='/logo.png'
+              alt='folio logo'
+              width={25}
+              height={25}
+              quality={100}
+              className="mr-2"
+            />
             <span>Folio</span>
           </Link>
 
-          <MobileNav isAuth={!!user}/>
+          <MobileNav isAuth={!!user} />
 
           <div className='hidden items-center space-x-4 sm:flex'>
             {!user ? (
@@ -70,8 +79,8 @@ const Navbar = () => {
                       ? "Your account"
                       : `${user.given_name} ${user.family_name}`
                   }
-                  email={user.email ?? ''}
-                  imageUrl={user.picture ?? ''}
+                  email={user.email ?? ""}
+                  imageUrl={user.picture ?? ""}
                 />
               </>
             )}
