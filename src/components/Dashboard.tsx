@@ -35,6 +35,12 @@ const Dashboard = ({ subscriptionPlan }: PageProps) => {
     },
   });
 
+  const { data: messagesFileIds } = trpc.getUserMessagesFileIds.useQuery();
+  const getFileMessageCount = (fileId: string) => {
+    const fileMessages = messagesFileIds?.filter((id) => id === fileId);
+    return fileMessages?.length ?? 'X';
+  };
+
   return (
     <main className='mx-auto max-w-7xl md:p-10'>
       <div className='mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0'>
@@ -81,7 +87,7 @@ const Dashboard = ({ subscriptionPlan }: PageProps) => {
 
                   <div className='flex items-center gap-2'>
                     <MessageSquare className='h-4 w-4' />
-                    mocked
+                    {getFileMessageCount(file.id)}
                   </div>
 
                   <Button
